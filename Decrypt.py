@@ -1,3 +1,4 @@
+### STEP 6 : Decryption and retrieval of audio file
 inputfilename='sound2.mp3'
 path="D:\\MMH\\project\\sound\\sound3.wav" #Path to the audio file
 big_num=2000;     #Number of keys generated, The bigger the number the bigger the chaos but at the same time the longer the key generation
@@ -71,25 +72,22 @@ print("Extract from input audio file")
 print(path)
 #import wave
 
-
-
-
 w= wave_open("D:\\MMH\\project\\sound\\sound3.wav",'rb')
+w1= wave_open("D:\\MMH\\project\\sound\\encrypted-sound2.mp3",'rb')
 
-
-channels=w.getnchannels()
+channels=w1.getnchannels()
 print("Number of channels",channels)
 
 
-framerate=w.getframerate()
+framerate=w1.getframerate()
 print("FrameRate:",framerate)
 
 
-sampwidth=w.getsampwidth()
+sampwidth=w1.getsampwidth()
 print("Sample Width:",sampwidth)
 
 
-framerate=w.getframerate()
+framerate=w1.getframerate()
 print("FrameRate:",framerate)
 
 
@@ -132,23 +130,37 @@ for i in range(len(intframe)):
 print("The XOR result is:")
 printlst(xor_result)
 
-#Convert XOR Result to bytearray
+#DECRYPTION
+print("Now we shall decrypt the encrypted values using XOR")
+orig=[]
+#print("The integer frames are:")
+#print(intframe)
 
-check=[]
-print("Now converting XOR values into frames:")
-for num in xor_result:
+for i in range(len(xor_result)):
+  xor=xor_result[i]^mergedfinal[i%keysize]
+  orig.append(xor)
+
+print("The decrypted result is:")
+#xor_result.reverse()
+printlst(orig)
+
+
+#printlst(intframe)
+#Convert Decrypted result to bytearray
+
+checked=[]
+print("Now converting them back into frames:")
+for num in orig:
   bytes_val = num.to_bytes(4, 'big')
   #print(bytes_val)
-  check.append(bytes_val)
-check.reverse()
-print("\nBytes list\n")
-printlst(check)
+  checked.append(bytes_val)
+#print("\nBytes list\n")
+printlst(checked)
 
-#code to convert bytearray to wav audio file
+#Write to an audio file
+print("Now we write the values back into a audio file")
 
-print("Now writing the encypted values to an audio file")
-filename='encrypted-'+inputfilename
-
+filename='decrypted5-'+inputfilename
  
 writer=wave_open("D:\\MMH\\project\\sound\\"+filename,'wb')
 
@@ -156,9 +168,8 @@ writer.setnchannels(channels)
 writer.setsampwidth(sampwidth)
 writer.setframerate(framerate)
 writer.setnframes(1)
-for frame in check:
+for frame in checked:
  writer.writeframesraw(frame)
 writer.close()
 
 print("Written to file ", filename)
-
