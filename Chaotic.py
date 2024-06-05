@@ -17,7 +17,7 @@ def keygen(x,r,size):
     key.append(((x*pow(10,16))%256.126))
   return key
 print("Key generation:")
-a = 0.0123;
+a = 0.0125;
 b = 3.9159;
 printlst(keygen(a,b,big_num)) 
 
@@ -67,30 +67,32 @@ printlst(mergedfinal)
 
 
 
-print("Extract from input audio file")
-print(path)
+
 #import wave
 
 
 
 
-w= wave_open("D:\\MMH\\project\\sound\\sound3.wav",'rb')
+w= wave_open("D:\\MMH\\MMHproject\\MMH\\sound\\piano.wav",'rb')
 
 
 channels=w.getnchannels()
 print("Number of channels",channels)
 
-
 framerate=w.getframerate()
 print("FrameRate:",framerate)
-
 
 sampwidth=w.getsampwidth()
 print("Sample Width:",sampwidth)
 
-
-framerate=w.getframerate()
-print("FrameRate:",framerate)
+framelist =[]
+framelist.append(channels)
+framelist.append(sampwidth)
+framelist.append(framerate)
+filename = 'frame-output.txt'
+outfile = open("D:\\MMH\\MMHproject\\MMH\\"+filename, 'w')
+outfile.writelines([str(i)+'\n' for i in framelist])
+outfile.close()
 
 
 
@@ -132,6 +134,13 @@ for i in range(len(intframe)):
 print("The XOR result is:")
 printlst(xor_result)
 
+
+
+
+filename = 'xor-result-output.txt'
+outfile = open("D:\\MMH\\MMHproject\\MMH\\"+filename, 'w')
+outfile.writelines([str(i)+'\n' for i in xor_result])
+outfile.close()
 #Convert XOR Result to bytearray
 
 check=[]
@@ -150,7 +159,7 @@ print("Now writing the encypted values to an audio file")
 filename='encrypted-'+inputfilename
 
  
-writer=wave_open("D:\\MMH\\project\\sound\\"+filename,'wb')
+writer=wave_open("D:\\MMH\\MMHproject\\MMH\\sound\\"+filename,'wb')
 
 writer.setnchannels(channels)
 writer.setsampwidth(sampwidth)
